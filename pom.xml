@@ -5,12 +5,12 @@
     <parent>
         <groupId>de.cismet</groupId>
         <artifactId>cismet-parent</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
     </parent>
 
     <groupId>de.cismet.cids</groupId>
     <artifactId>cids-parent</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
     <packaging>pom</packaging>
 
     <name>cids parent POM</name>
