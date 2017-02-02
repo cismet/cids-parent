@@ -82,46 +82,9 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <executions>
-                        <!-- 
-                            extends the maven-dependency-plugin executions defined in cismet-parent
-                            by the copy-installed task
-                        -->
-                        <execution>
-                            <id>copy-installed</id>
-                            <phase>install</phase>
-                            <goals>
-                                <goal>copy</goal>
-                            </goals>
-                            <configuration>
-                                <artifactItems>
-                                    <artifactItem>
-                                        <groupId>${project.groupId}</groupId>
-                                        <artifactId>${project.artifactId}</artifactId>
-                                        <version>${project.version}</version>
-                                        <type>${project.packaging}</type>
-                                        <overWrite>true</overWrite>
-                                        <destFileName>${project.build.finalName}.${project.packaging}</destFileName>
-                                    </artifactItem>
-                                </artifactItems>
-                                <!--
-                                    de.cismet.cidsDistDir shall be defined in a user's settings.xml as an
-                                    absolute path to the distribution where the artifact shall be copied
-                                    without a trailing /
-                                -->
-                                <outputDirectory>${de.cismet.cidsDistDir}/${de.cismet.libDir}</outputDirectory>
-                                <stripVersion>true</stripVersion>
-                                <!-- 
-                                    disable execution by default and enable in profile
-                                -->
-                                <skip>true</skip>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
+                <!--
+                    maven-help-plugin - print the actives profiles for esier debugging
+                -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-help-plugin</artifactId>
@@ -132,12 +95,13 @@
                             <goals>
                                 <goal>active-profiles</goal>
                             </goals>
-                            <configuration>
-                                <skip>true</skip>
-                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
+                
+                <!--
+                    maven-antrun-plugin - print important properties for esier debugging
+                -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
@@ -155,23 +119,49 @@
                                     <echo>[de.cismet.cids.lib.local] ${de.cismet.cids.lib.local}</echo>
                                     <echo>[de.cismet.cids.navigator.workingDir] ${de.cismet.cids.navigator.workingDir}</echo>
                                     <echo>[de.cismet.cids.server.workingDir] ${de.cismet.cids.server.workingDir}</echo>
+                                    <echo>[mdep.skip] ${mdep.skip}</echo>
+                                    <echo>[mdep.analyze.skip] ${mdep.analyze.skip}</echo>
+                                    <echo>[enforcer.skip] ${enforcer.skip}</echo>
+                                    <echo>[jalopy.skip] ${jalopy.skip}</echo>
+                                    <echo>[maven.test.skip] ${maven.test.skip}</echo>
+                                    <echo>[jarsigner.skip] ${jarsigner.skip}</echo>
                                 </target>
-                                <skip>true</skip>
                             </configuration>
                         </execution>
                     </executions>
                 </plugin>
-                </plugins>
+            </plugins>
         </pluginManagement>
+        
+        <!--
+            extend plugins of cismet-parent that are executed for each build
+        -->
+        <plugins>
+            <!-- 
+                activate the print-active-profiles task configured in pluginManagement
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-help-plugin</artifactId>
+            </plugin>
+                    
+            <!-- 
+                activate the print-properties task configured in pluginManagement
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
     
     <profiles>
         <!--
             cismet development profile for code formatting, artifact signing 
             and artifact copying to legacy cids distribution
-            This profile *extends* the cismet-inhouse-dev profile in cismet-parent.pom by the 
-            copy-libs task configured in pluginManagement!
-            It should be activated by default in settings.xml during development!
+            This profile *extends* the cismet-inhouse-dev profile in cismet-parent.pom implicitely 
+            by the copy-libs task configured in pluginManagement!
+            It should be activated by default in user's settings.xml during development!
             @deprecated
             
             This profile depends on the following properties (to be configured settings.xml and child pom):
@@ -183,7 +173,8 @@
         -->
         <profile>
             <id>cismet-inhouse-dev</id>
-             <activation>
+            
+            <activation>
                 <!-- activate in settings.xml of local user -->
                 <activeByDefault>false</activeByDefault>
             </activation>
@@ -198,68 +189,74 @@
             -->
             
             <build>
-                <plugins>
-                    <!-- 
-                        activate the print-active-profiles task configured in pluginManagement
-                    -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-help-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>print-active-profiles</id>
-                                <goals>
-                                    <goal>active-profiles</goal>
-                                </goals>
-                                <configuration>
-                                    <skip>false</skip>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    
-                    <!-- 
-                        activate the print-properties task configured in pluginManagement
-                    -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>print-properties</id>
-                                <configuration>
-                                    <skip>false</skip>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    
-                    <!-- 
-                        activate the copy-installed task configured in pluginManagement
-                    -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-installed</id>
-                                <configuration>
-                                    <skip>false</skip>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
+                <!--
+                    maven-dependency-plugin is already enabled in the build/plugins section of cismet-parent
+                    and thus is executed for every build independently of the activated profile.
+                    Therfore the configuration of the copy-installed task has to be defined (twice) in
+                    the *extended* cids dev and release profiles and *not* in the pluginManagement section
+                    of the cids-parent.pom.
+                -->
+                <pluginManagement>
+                    <plugins>
+                        <!--
+                            copy dependencies that are renamed to <finalName> to the
+                            legacy cidsDistribution dir
+                            - ${de.cismet.cidsDistDir} from user's settings.xml
+                            - ${de.cismet.libDir} from pom.xml of project
+                        -->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-dependency-plugin</artifactId>
+                            <executions>
+                                <!-- 
+                                    extends the maven-dependency-plugin executions defined in cismet-parent
+                                    by the copy-installed task
+                                -->
+                                <execution>
+                                    <id>copy-installed</id>
+                                    <phase>install</phase>
+                                    <goals>
+                                        <goal>copy</goal>
+                                    </goals>
+                                    <configuration>
+                                        <artifactItems>
+                                            <artifactItem>
+                                                <groupId>${project.groupId}</groupId>
+                                                <artifactId>${project.artifactId}</artifactId>
+                                                <version>${project.version}</version>
+                                                <type>${project.packaging}</type>
+                                                <overWrite>true</overWrite>
+                                                <destFileName>${project.build.finalName}.${project.packaging}</destFileName>
+                                            </artifactItem>
+                                        </artifactItems>
+                                        <!--
+                                            de.cismet.cidsDistDir shall be defined in a user's settings.xml as an
+                                            absolute path to the distribution where the artifact shall be copied
+                                            without a trailing /
+                                        -->
+                                        <outputDirectory>${de.cismet.cidsDistDir}/${de.cismet.libDir}</outputDirectory>
+                                        <stripVersion>true</stripVersion>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+                <!-- 
+                    the copy-installed task of the maven-dependency-plugin that is configured in pluginManagement
+                    of the extended dev and release profiles is implicitely enabled by the build/plugins section of 
+                    the cismet-parent.pom when the respective profile is active!
+                -->
             </build>
         </profile>
         
          <!--
             cismet release profile activates plugins artifact signing and creation of -src and -javadoc.jar
             in addition to default plugins activated in cismet-parent.
-            This profile *extends* the cismet-release profile in cismet-parent.pom by the 
+            This profile is *extends* the cismet-release profile in cismet-parent.pom implicitely by the 
             copy-libs task configured in pluginManagement!
-            It should be activated by default in settings.xml during development!
-            This profile should NOT be activated by default in settings.xml during development!
+            This profile should be activated by default in settings.xml on jenkins for deployment!
+            This profile should NOT be activated by default in user's settings.xml during development!
             @deprecated
             
             This profile depends on the following properties (to be configured settings.xml and child pom):
@@ -271,28 +268,58 @@
         -->
         <profile>
             <id>cismet-release</id>
-             <activation>
+            
+            <activation>
                 <!-- activate in settings.xml of jenkins -->
                 <activeByDefault>false</activeByDefault>
             </activation>
+            
             <build>
-                <plugins>
-                    <!-- 
-                        activate the copy-installed task configured in pluginManagement
-                    -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-installed</id>
-                                <configuration>
-                                    <skip>false</skip>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-dependency-plugin</artifactId>
+                            <executions>
+                                <!-- 
+                                    extends the maven-dependency-plugin executions defined in cismet-parent
+                                    by the copy-installed task
+                                -->
+                                <execution>
+                                    <id>copy-installed</id>
+                                    <phase>install</phase>
+                                    <goals>
+                                        <goal>copy</goal>
+                                    </goals>
+                                    <configuration>
+                                        <artifactItems>
+                                            <artifactItem>
+                                                <groupId>${project.groupId}</groupId>
+                                                <artifactId>${project.artifactId}</artifactId>
+                                                <version>${project.version}</version>
+                                                <type>${project.packaging}</type>
+                                                <overWrite>true</overWrite>
+                                                <destFileName>${project.build.finalName}.${project.packaging}</destFileName>
+                                            </artifactItem>
+                                        </artifactItems>
+                                        <!--
+                                            de.cismet.cidsDistDir shall be defined in a user's settings.xml as an
+                                            absolute path to the distribution where the artifact shall be copied
+                                            without a trailing /
+                                        -->
+                                        <outputDirectory>${de.cismet.cidsDistDir}/${de.cismet.libDir}</outputDirectory>
+                                        <stripVersion>true</stripVersion>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+                <!-- 
+                    the copy-installed task of the maven-dependency-plugin that is configured in pluginManagement
+                    of the extended dev and release profiles is implicitely enabled by the build/plugins section of 
+                    the cismet-parent.pom when the respective profile is active!
+                -->
             </build>
         </profile>
         
@@ -336,17 +363,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-help-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>print-active-profiles</id>
-                                <goals>
-                                    <goal>active-profiles</goal>
-                                </goals>
-                                <configuration>
-                                    <skip>false</skip>
-                                </configuration>
-                            </execution>
-                        </executions>
                     </plugin>
                     
                     <!-- 
@@ -355,14 +371,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>print-properties</id>
-                                <configuration>
-                                    <skip>false</skip>
-                                </configuration>
-                            </execution>
-                        </executions>
                     </plugin>
                     
                     <!--
