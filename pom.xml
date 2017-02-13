@@ -124,6 +124,7 @@
                                     <echo>[enforcer.skip] ${enforcer.skip}</echo>
                                     <echo>[jalopy.skip] ${jalopy.skip}</echo>
                                     <echo>[maven.test.skip] ${maven.test.skip}</echo>
+                                    <echo>[maven.source.skip] ${maven.source.skip}</echo>
                                     <echo>[jarsigner.skip] ${jarsigner.skip}</echo>
                                 </target>
                             </configuration>
