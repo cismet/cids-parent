@@ -81,6 +81,11 @@
         
     <profiles>
         <!--
+            WARNING: DEPRECATED!
+            Copy and rename generated artifacts to cismet libs dir only required by 
+            deprecated legacy cids distributions. New distribution shall be generated automatically by
+            the cids-distribution profile!
+
             cismet development profile for code formatting, artifact signing 
             and artifact copying to legacy cids distribution
             This profile *extends* the cismet-inhouse-dev profile in cismet-parent.pom implicitely 
@@ -117,7 +122,7 @@
                     maven-dependency-plugin is already enabled in the build/plugins section of cismet-parent
                     and thus is executed for every build independently of the activated profile.
                     Therfore the configuration of the copy-installed task has to be defined (twice) in
-                    the *extended* cids dev and release profiles and *not* in the pluginManagement section
+                    the *extended* cids *dev* and *release* profiles and *not* in the pluginManagement section
                     of the cids-parent.pom.
                 -->
                 <pluginManagement>
@@ -175,6 +180,11 @@
         </profile>
         
          <!--
+            WARNING: DEPRECATED!
+            Copy and rename generated artifacts to cismet libs dir only required by 
+            deprecated legacy cids distributions. New distribution shall be generated automatically by
+            the cids-distribution profile!
+            
             cismet release profile activates plugins artifact signing and creation of -src and -javadoc.jar
             in addition to default plugins activated in cismet-parent.
             This profile is *extends* the cismet-release profile in cismet-parent.pom implicitely by the 
@@ -191,6 +201,12 @@
             - <de.cismet.libDir
         -->
         <profile>
+            <!--
+                'cismet-release' is already defined in cismet-parent 
+                The build plugins defined in this extended profile are executed 
+                *in addition* to the plugins defined in respective 'cismet-release' 
+                profile in cismet-parent   ->
+            -->
             <id>cismet-release</id>
             
             <activation>
@@ -243,6 +259,7 @@
                     the copy-installed task of the maven-dependency-plugin that is configured in pluginManagement
                     of the extended dev and release profiles is implicitely enabled by the build/plugins section of 
                     the cismet-parent.pom when the respective profile is active!
+                    -> no need to specify them again in <build><plugins>! (See effective POM)
                 -->
             </build>
         </profile>
