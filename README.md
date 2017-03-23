@@ -2,3 +2,6 @@ cids-parent [![Build Status](http://ci.cismet.de/buildStatus/icon?job=cids-paren
 ===========
 
 parent pom for cids related projects
+
+
+**deprecated**, still required for cids legacy distributions
