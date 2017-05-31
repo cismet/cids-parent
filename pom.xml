@@ -5,12 +5,12 @@
     <parent>
         <groupId>de.cismet</groupId>
         <artifactId>cismet-parent</artifactId>
-        <version>5.0.1</version>
+        <version>5.1.2</version>
     </parent>
 
     <groupId>de.cismet.cids</groupId>
     <artifactId>cids-parent</artifactId>
-    <version>5.0.1</version>
+    <version>5.1.1</version>
     <packaging>pom</packaging>
 
     <name>cids parent POM (deprecated)</name>
@@ -28,7 +28,7 @@
         <connection>https://github.com/cismet/cids-parent.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cids-parent.git</developerConnection>
         <url>https://github.com/cismet/cids-parent</url>
-        <tag>v5.0.1</tag>
+        <tag>v5.1.1</tag>
     </scm>
   
     <issueManagement>
@@ -193,12 +193,12 @@
             This profile should NOT be activated by default in user's settings.xml during development!
             @deprecated
             
-            This profile depends on the following properties (to be configured settings.xml and child pom):
-            - de.cismet.keystore.path
-            - de.cismet.keystore.pass
-            - de.cismet.signing.tsa.server
-            - de.cismet.cidsDistDir
-            - <de.cismet.libDir -->
+        This profile depends on the following properties (to be configured settings.xml and child pom):
+        - de.cismet.keystore.path
+        - de.cismet.keystore.pass
+        - de.cismet.signing.tsa.server
+        - de.cismet.cidsDistDir
+        - <de.cismet.libDir -->
         <profile>
             <!--
                 'cismet-release' is already defined in cismet-parent 
