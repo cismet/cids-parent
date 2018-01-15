@@ -10,7 +10,7 @@
 
     <groupId>de.cismet.cids</groupId>
     <artifactId>cids-parent</artifactId>
-    <version>5.2-SNAPSHOT</version>
+    <version>6.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>cids parent POM (deprecated)</name>
