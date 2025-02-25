@@ -5,8 +5,8 @@
     <parent>
         <groupId>de.cismet</groupId>
         <artifactId>cismet-parent</artifactId>
-        <version>8.0</version>
-    </parent>
+        <version>9.0</version>
+    </parent> 
 
     <groupId>de.cismet.cids</groupId>
     <artifactId>cids-parent</artifactId>
@@ -54,31 +54,6 @@
     </dependencyManagement> 
     -->
     
-    <!--
-        - cids projects use log4j! 
-        - Replace commons-loggin by jcl-over-slf4j
-        - explicitely add slf4j-api (backwards compatible, required by jcl-over-slf4j)
-    -->
-    <dependencies>
-        <!-- BEGIN: managed dependencies from cids-ext-bom -->
-        <!--<dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>-->
-        <!--
-            Required by sanitize-logging-frameworks maven-enforcer-plugin rule
-        
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-        </dependency>-->
-        <!-- END: managed dependencies from cids-ext-bom -->
-    </dependencies>
-        
     <profiles>
         <!--
             WARNING: DEPRECATED!
